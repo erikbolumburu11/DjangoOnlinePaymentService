@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %} {{ account.username }} {% endblock title %}
+
+{% block content %}
+    <div class="container-fluid p-5 bg-secondary text-white text-center">
+        <h1>{{ account.username|upper }}</h1>
+        <p>First Name: {{ account.first_name }}</p>
+        <p>Last Name: {{ account.last_name }}</p>
+        <p>Balance: {{ currency_symbol }}{{ balance }}</p>
+
+        {% if user.username == account.username %}
+            <form action="{% url 'make_transaction' %}" method="post" class="pt-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Make Transaction</button>
+            </form>
+            <form action="{% url 'request_transaction' %}" method="post" class="pt-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Request Money</button>
+            </form>
+    {% endif %}
+    </div>
+
+    <div class="container mt-5">
+          <div class="row">
+          {% if transactions.count != 0 %}
+            <div class="col-sm-4">
+                <h2 class="text-center">Transaction History</h2>
+                <table class ="table table-sm table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.sender.username }}</td>
+                            <td>{{ transaction.recipient.username }}</td>
+                            <td>{{ currency_symbol }}{{ transaction.amount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <a href="/transaction_history/{{ account.username }}">View All</a>
+            </div>
+        {% endif %}
+
+
+    {% if outgoing_requests.count != 0 %}
+        <div class="col-sm-4">
+        <h2 class="text-center">Outgoing Requests</h2>
+            <table class ="table table-sm table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>To</th>
+                    <th>Amount</th>
+                    <th>Link</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for request in outgoing_requests %}
+                    <tr>
+                        <td>{{ request.sender.username }}</td>
+                        <td>{{ currency_symbol }}{{ request.amount }}</td>
+                        <td> <a href="/transaction_request/{{ request.pk }}">View</a> </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        <a href="/outgoing_requests/{{ account.username }}">View All</a>
+        </div>
+    {% endif %}
+
+    {% if incoming_requests.count != 0 %}
+        <div class="col-sm-4">
+        <h2 class="text-center">Incoming Requests</h2>
+            <table class ="table table-sm table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>From</th>
+                    <th>Amount</th>
+                    <th>Link</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for request in incoming_requests %}
+                    <tr>
+                        <td>{{ request.recipient.username }}</td>
+                        <td>{{ currency_symbol }}{{ request.amount }}</td>
+                        <td> <a href="/transaction_request/{{ request.pk }}">View</a> </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        <a href="/incoming_requests/{{ account.username }}">View All</a>
+        </div>
+    {% endif %}
+
+          </div>
+    </div>
+
+{% endblock content %}

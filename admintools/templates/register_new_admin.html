@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %} {% endblock title %}
+
+{% block content %}
+    <h1>Register New Admin</h1>
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <button class="btn btn-outline-dark">Submit</button>
+    </form>
+{% endblock content %}

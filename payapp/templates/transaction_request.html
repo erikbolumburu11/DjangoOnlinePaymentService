@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %} Incoming Request From {{ transaction_request.recipient }} {% endblock title %}
+
+{% block content %}
+    <h1>Incoming Request From {{ transaction_request.recipient }}</h1>
+    <p>{{ transaction_request.recipient }} has requested {{ transaction_request.amount }}</p>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+            {% if user.get_username == transaction_request.sender.username %}
+                {% if transaction_request.amount <= transaction_request.sender.balance %}
+                    <button class="btn btn-outline-dark" type="submit" value="1" name="accept">Send Money</button>
+                {% endif %}
+                <button class="btn btn-outline-dark" type="submit" value="0" name="deny">Deny</button>
+            {% endif %}
+            {% if user.get_username == transaction_request.recipient.username %}
+                <button class="btn btn-outline-dark" type="submit" value="0" name="deny">Cancel</button>
+            {% endif %}
+        {% endif %}
+    </form>
+{% endblock content %}

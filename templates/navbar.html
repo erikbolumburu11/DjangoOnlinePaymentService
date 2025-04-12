@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="main.css">
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+              <a class="nav-link" href="/">Account</a>
+              {% if user.is_superuser %}
+                  <a class="nav-link" href="/admin_tools/">Admin Tools</a>
+              {% endif %}
+              <form action="{% url 'logout' %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-link text-decoration-none">Log Out</button>
+              </form>
+          {% endif %}
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} Make Transaction {% endblock title %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>Make a transaction!</h1>
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy form %}
+        <button class="btn btn-outline-dark">Submit</button>
+    </form>
+{% endblock content %}

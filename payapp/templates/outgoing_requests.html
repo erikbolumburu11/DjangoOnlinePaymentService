@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %} Outgoing Requests {% endblock title %}
+
+{% block content %}
+    <h1>Outgoing Requests</h1>
+    <table class ="table table-striped">
+        <thead>
+        <tr>
+            <th>To</th>
+            <th>Amount</th>
+            <th>Link</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for request in outgoing_requests %}
+            <tr>
+                <td>{{ request.sender.username }}</td>
+                <td>{{ currency_symbol }}{{ request.amount }}</td>
+                <td> <a href="/transaction_request/{{ request.pk }}">View</a> </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
